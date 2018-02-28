@@ -27,3 +27,5 @@ airx_device2_id: 22222
 效果
 
 ![https://wx3.sinaimg.cn/large/56e89fd7ly1fowbf9pxoej20f00cgdgc.jpg](https://wx3.sinaimg.cn/large/56e89fd7ly1fowbf9pxoej20f00cgdgc.jpg)
+
+![https://wx1.sinaimg.cn/large/56e89fd7ly1fowcecd4vfj20ip0m6jsg.jpg](https://wx1.sinaimg.cn/large/56e89fd7ly1fowcecd4vfj20ip0m6jsg.jpg)

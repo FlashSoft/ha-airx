@@ -1,7 +1,7 @@
 # ha-airx
 `airx的home assistant插件`
 
-####配置修改
+#### 配置修改
 
 需要在configuration.yaml中开启packages
 ```yaml
@@ -22,7 +22,7 @@ airx_user_id: 111111
 airx_device_id: 22222
 airx_device2_id: 22222
 ```
-####变更记录
+#### 变更记录
 ```
 0.01
 	第一版，功能跑通

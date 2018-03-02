@@ -1,4 +1,4 @@
-# ha-airx
+# HA-AIRX
 `airx的home assistant插件`
 
 #### 配置修改

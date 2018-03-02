@@ -18,6 +18,11 @@ sensor:
         icon_template: 'mdi:blur'
         value_template: '{{ states.fan.airx.attributes.pm25 }}'
         unit_of_measurement: μg/m³
+      airx_outside_pm25:
+        friendly_name: 室外空气质量
+        icon_template: 'mdi:blur'
+        value_template: '{{ states.fan.airx.attributes.outside_pm25 }}'
+        unit_of_measurement: μg/m³
       airx_remain:
         friendly_name: 滤网剩余寿命
         icon_template: 'mdi:chemical-weapon'
@@ -28,6 +33,11 @@ sensor:
         icon_template: 'mdi:blur'
         value_template: '{{ states.fan.airx2.attributes.pm25 }}'
         unit_of_measurement: μg/m³
+      airx2_outside_pm25:
+        friendly_name: 室外空气质量
+        icon_template: 'mdi:blur'
+        value_template: '{{ states.fan.airx2.attributes.outside_pm25 }}'
+        unit_of_measurement: μg/m³
       airx2_remain:
         friendly_name: 滤网剩余寿命
         icon_template: 'mdi:chemical-weapon'
@@ -36,14 +46,16 @@ sensor:
 
 group:
   airx:
-    name: Airx
+    name: Airx空气净化器
     view: no
     entities:
       - fan.airx
       - sensor.airx_pm25
+      - sensor.airx_outside_pm25
       - sensor.airx_remain
       - fan.airx2
       - sensor.airx2_pm25
+      - sensor.airx2_outside_pm25
       - sensor.airx2_remain
 
 homeassistant:

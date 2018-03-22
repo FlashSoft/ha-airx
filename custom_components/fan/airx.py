@@ -2,8 +2,8 @@
 Airx空气净化器插件
 @author: FlashSoft
 @created: 2018-02-28
-@updated: 2018-02-28
-@version: 0.01
+@updated: 2018-03-02
+@version: 0.02
 @yaml example:
 fan:
   - platform: airx
@@ -85,44 +85,53 @@ class AirxController(object):
     def open(self) -> bool:
         _LOGGER.info('============= airx open =============')
         self.lock = time.time()
-        api = 'http://luxcar.com.cn/airx/airx_iot_reportup/web/equipment/DeviceOnOrDown'
-        res = requests.post(api, data=dict(self._base_data, **{'standby': 0}))
-        json = res.json()
-        # _LOGGER.info('open: %s', json)
-        if json['success'] is True:
-            return True
+        try:
+            api = 'http://luxcar.com.cn/airx/airx_iot_reportup/web/equipment/DeviceOnOrDown'
+            res = requests.post(api, data=dict(self._base_data, **{'standby': 0}))
+            json = res.json()
+            # _LOGGER.info('open: %s', json)
+            if json['success'] is True:
+                return True
+        except BaseException:
+            pass
         return False
 
     def close(self):
         _LOGGER.info('============= airx close =============')
         self.lock = time.time()
-        api = 'http://luxcar.com.cn/airx/airx_iot_reportup/web/equipment/DeviceOnOrDown'
-        res = requests.post(api, data=dict(self._base_data, **{'standby': 1}))
-        json = res.json()
-        # _LOGGER.info('close: %s', json)
-        if json['success'] is True:
-            return True
+        try:
+            api = 'http://luxcar.com.cn/airx/airx_iot_reportup/web/equipment/DeviceOnOrDown'
+            res = requests.post(api, data=dict(self._base_data, **{'standby': 1}))
+            json = res.json()
+            # _LOGGER.info('close: %s', json)
+            if json['success'] is True:
+                return True
+        except BaseException:
+            pass
         return False
 
     def set_speed(self, speed):
         _LOGGER.info('============= airx set speed: %s =============', speed)
         self.lock = time.time()
-        api = 'http://luxcar.com.cn/airx/airx_iot_reportup/web/equipment/DeviceControl'
+        try:
+            api = 'http://luxcar.com.cn/airx/airx_iot_reportup/web/equipment/DeviceControl'
 
-        set_mode = CONTROL_MAP[speed][0]
-        set_speed = CONTROL_MAP[speed][1]
+            set_mode = CONTROL_MAP[speed][0]
+            set_speed = CONTROL_MAP[speed][1]
 
-        res = requests.post(
-            api,
-            data=dict(self._base_data, **{
-                'mode': set_mode,
-                'speed': set_speed
-            }))
+            res = requests.post(
+                api,
+                data=dict(self._base_data, **{
+                    'mode': set_mode,
+                    'speed': set_speed
+                }))
 
-        json = res.json()
-        # _LOGGER.info('set_speed: %s, %s, %s', set_mode, set_speed, json)
-        if json['success'] is True:
-            return True
+            json = res.json()
+            # _LOGGER.info('set_speed: %s, %s, %s', set_mode, set_speed, json)
+            if json['success'] is True:
+                return True
+        except BaseException:
+            pass
         return False
 
     @property
@@ -131,28 +140,30 @@ class AirxController(object):
         if (self.lock is not None) and (time.time() - self.lock < 5):
             _LOGGER.info('============= airx status return =============')
             return None
-
-        api = 'http://luxcar.com.cn/airx/airx_iot_reportup/web/equipment/loadDeviceData'
-        res = requests.post(api, data=dict(self._base_data))
-        json = res.json()
-        # _LOGGER.info('status: %s', json)
-        if json['success'] is True:
-            if json['data']['standby'] == 0:
-                if json['data']['PuriOperationMode'] == 0:
-                    speed = SPEED_AUTO
+        try:
+            api = 'http://luxcar.com.cn/airx/airx_iot_reportup/web/equipment/loadDeviceData'
+            res = requests.post(api, data=dict(self._base_data))
+            json = res.json()
+            # _LOGGER.info('status: %s', json)
+            if json['success'] is True:
+                if json['data']['standby'] == 0:
+                    if json['data']['PuriOperationMode'] == 0:
+                        speed = SPEED_AUTO
+                    else:
+                        speed = SPEED_MAP[json['data']['AirSpeed']]
                 else:
-                    speed = SPEED_MAP[json['data']['AirSpeed']]
-            else:
-                speed = SPEED_OFF
-            return {
-                'available': True,
-                'speed': speed,
-                'state_remain': json['data']['FilterRemain'],
-                'state_pm25': json['data']['pm25'],
-                'state_outside_pm25': json['data']['pm25_city'],
-                'state_light': json['data']['Inlight'],
-                'state_lock': json['data']['Childrenlock']
-            }
+                    speed = SPEED_OFF
+                return {
+                    'available': True,
+                    'speed': speed,
+                    'state_remain': json['data']['FilterRemain'],
+                    'state_pm25': json['data']['pm25'],
+                    'state_outside_pm25': json['data']['pm25_city'],
+                    'state_light': json['data']['Inlight'],
+                    'state_lock': json['data']['Childrenlock']
+                }
+        except BaseException:
+            pass
         return {
             'available': False,
             'speed': None,

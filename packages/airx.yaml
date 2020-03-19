@@ -47,7 +47,6 @@ sensor:
 group:
   airx:
     name: Airx空气净化器
-    view: no
     entities:
       - fan.airx
       - sensor.airx_pm25

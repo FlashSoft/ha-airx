@@ -22,6 +22,8 @@ import datetime
 from homeassistant.components.fan import (FanEntity)
 from homeassistant.util import Throttle
 
+headers = {'User-Agent': 'airMaster/2.1.10 (iPhone; iOS 15.3.1; Scale/3.00)'}
+
 _LOGGER = logging.getLogger(__name__)
 
 SCAN_INTERVAL = datetime.timedelta(seconds=5)
@@ -86,7 +88,7 @@ class AirxController(object):
         _LOGGER.info('============= airx open =============')
         self.lock = time.time()
         try:
-            api = 'http://luxcar.com.cn/airx/airx_iot_reportup/web/equipment/DeviceOnOrDown'
+            api = 'https://airxchina.com.cn/airx/airx_iot_reportup/web/equipment/DeviceOnOrDown'
             res = requests.post(api, data=dict(self._base_data, **{'standby': 0}))
             json = res.json()
             # _LOGGER.info('open: %s', json)
@@ -100,7 +102,7 @@ class AirxController(object):
         _LOGGER.info('============= airx close =============')
         self.lock = time.time()
         try:
-            api = 'http://luxcar.com.cn/airx/airx_iot_reportup/web/equipment/DeviceOnOrDown'
+            api = 'https://airxchina.com.cn/airx/airx_iot_reportup/web/equipment/DeviceOnOrDown'
             res = requests.post(api, data=dict(self._base_data, **{'standby': 1}))
             json = res.json()
             # _LOGGER.info('close: %s', json)
@@ -114,7 +116,7 @@ class AirxController(object):
         _LOGGER.info('============= airx set speed: %s =============', speed)
         self.lock = time.time()
         try:
-            api = 'http://luxcar.com.cn/airx/airx_iot_reportup/web/equipment/DeviceControl'
+            api = 'https://airxchina.com.cn/airx/airx_iot_reportup/web/equipment/DeviceControl'
 
             set_mode = CONTROL_MAP[speed][0]
             set_speed = CONTROL_MAP[speed][1]
@@ -141,7 +143,7 @@ class AirxController(object):
             _LOGGER.info('============= airx status return =============')
             return None
         try:
-            api = 'http://luxcar.com.cn/airx/airx_iot_reportup/web/equipment/loadDeviceData'
+            api = 'https://airxchina.com.cn/airx/airx_iot_reportup/web/equipment/loadDeviceData'
             res = requests.post(api, data=dict(self._base_data))
             json = res.json()
             # _LOGGER.info('status: %s', json)
